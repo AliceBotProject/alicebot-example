@@ -1,0 +1,4 @@
+{
+    "plugin_dir": ["plugins"],
+    "adapters": ["alicebot.adapter.cqhttp"]
+}
