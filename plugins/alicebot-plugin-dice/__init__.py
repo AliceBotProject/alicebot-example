@@ -29,6 +29,10 @@ class Dice(Plugin):
         else:
             dice_multiply = int(self.msg_match.group('dice_multiply'))
 
+        if dice_times > self.dice_config.max_dice_times:
+            await self.event.replay(self.format_str(self.dice_config.exceed_max_dice_times_srt))
+            return
+
         dice = [round(random.random() * (dice_faces - 1) + 1) for _ in range(dice_times)]
         dice_sum = sum(dice)
         if dice_multiply is None:
@@ -43,11 +47,11 @@ class Dice(Plugin):
             result_str += f'{dice_sum}X{dice_multiply}={dice_sum * dice_multiply}'
 
         logger.info(f'Dice Plugin: {result_str}')
-        await self.event.replay(self.format_fix_str(self.dice_config.str_prefix) +
+        await self.event.replay(self.format_str(self.dice_config.str_prefix) +
                                 result_str +
-                                self.format_fix_str(self.dice_config.str_suffix))
+                                self.format_str(self.dice_config.str_suffix))
 
-    def format_fix_str(self, fix_str: str) -> str:
+    def format_str(self, fix_str: str) -> str:
         if self.adapter.name == 'cqhttp':
             return fix_str.format(user_name=self.event.sender.nickname)
         elif self.adapter.name == 'mirai':
