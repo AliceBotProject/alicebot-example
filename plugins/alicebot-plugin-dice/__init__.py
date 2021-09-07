@@ -33,7 +33,7 @@ class Dice(Plugin):
             await self.event.replay(self.format_str(self.dice_config.exceed_max_dice_times_srt))
             return
 
-        dice = [round(random.random() * (dice_faces - 1) + 1) for _ in range(dice_times)]
+        dice = [random.randint(1, dice_faces) for _ in range(dice_times)]
         dice_sum = sum(dice)
         if dice_multiply is None:
             result_str = f'{dice_times}D{dice_faces}='
