@@ -17,10 +17,8 @@ class Config(BaseModel):
     """是否处理群消息。"""
     accept_group: Optional[Set[int]] = None
     """处理消息的群号，仅当 handle_group_message 为 True 时生效，留空表示处理所有群。"""
-    str_prefix: str = '{user_name}: '
-    """最终发送消息的前缀。"""
-    str_suffix: str = ''
-    """最终发送消息的后缀。"""
+    message_str: str = '{user_name}: {message}'
+    """最终发送消息的格式。"""
     max_dice_times: int = 1000
     """最大单次投掷次数。"""
     exceed_max_dice_times_str: str = '错误：超过最大投掷次数。'

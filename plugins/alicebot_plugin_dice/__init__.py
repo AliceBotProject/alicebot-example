@@ -47,19 +47,17 @@ class Dice(Plugin):
             result_str += f'{dice_sum}X{dice_multiply}={dice_sum * dice_multiply}'
 
         logger.info(f'Dice Plugin: {result_str}')
-        await self.event.replay(self.format_str(self.dice_config.str_prefix) +
-                                result_str +
-                                self.format_str(self.dice_config.str_suffix))
+        await self.event.replay(self.format_str(self.dice_config.message_str, result_str))
 
-    def format_str(self, fix_str: str) -> str:
+    def format_str(self, format_str: str, message_str: str = '') -> str:
         if self.adapter.name == 'cqhttp':
-            return fix_str.format(user_name=self.event.sender.nickname)
+            format_str = format_str.format(message=message_str, user_name=self.event.sender.nickname)
         elif self.adapter.name == 'mirai':
             if self.event.type == 'FriendMessage':
-                return fix_str.format(user_name=self.event.sender.nickname)
+                format_str = format_str.format(message=message_str, user_name=self.event.sender.nickname)
             elif self.event.type == 'GroupMessage':
-                return fix_str.format(user_name=self.event.sender.memberName)
-        return fix_str
+                format_str = format_str.format(message=message_str, user_name=self.event.sender.memberName)
+        return format_str
 
     async def rule(self) -> bool:
         if self.adapter.name == 'cqhttp':
