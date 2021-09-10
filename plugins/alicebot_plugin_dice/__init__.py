@@ -13,7 +13,7 @@ class Dice(Plugin):
         self.re_pattern = re.compile(
             f'[{"".join(self.dice_config.command_prefix | getattr(self.config, "command_prefix", set()))}]' +
             f'[{"".join(self.dice_config.command)}]' +
-            r'(?P<dice_times>[0-9]+)[d](?P<dice_faces>[0-9]+)([*x](?P<dice_multiply>[0-9]+))?',
+            r'\s*(?P<dice_times>[0-9]+)[d](?P<dice_faces>[0-9]+)([*x](?P<dice_multiply>[0-9]+))?.*',
             flags=re.I
         )
 
