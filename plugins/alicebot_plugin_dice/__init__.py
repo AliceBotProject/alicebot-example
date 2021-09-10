@@ -1,25 +1,22 @@
 import re
 import random
 from alicebot.log import logger
-from alicebot.plugin import Plugin
+from plugins.alicebot_plugin_public import BasePlugin
 
 from .config import Config
 
 
-class Dice(Plugin):
+class Dice(BasePlugin[Config]):
     msg_match: re.Match
+    plugin_config_class: Config = Config
 
     def __post_init__(self):
         self.re_pattern = re.compile(
-            f'[{"".join(self.dice_config.command_prefix | getattr(self.config, "command_prefix", set()))}]' +
-            f'[{"".join(self.dice_config.command)}]' +
+            f'[{"".join(self.plugin_config.command_prefix | getattr(self.config, "command_prefix", set()))}]' +
+            f'[{"".join(self.plugin_config.command)}]' +
             r'\s*(?P<dice_times>[0-9]+)[d](?P<dice_faces>[0-9]+)([*x](?P<dice_multiply>[0-9]+))?.*',
             flags=re.I
         )
-
-    @property
-    def dice_config(self) -> Config:
-        return getattr(self.config, Config.__config_name__)
 
     async def handle(self) -> None:
         dice_times = int(self.msg_match.group('dice_times'))
@@ -29,8 +26,8 @@ class Dice(Plugin):
         else:
             dice_multiply = int(self.msg_match.group('dice_multiply'))
 
-        if dice_times > self.dice_config.max_dice_times:
-            await self.event.replay(self.format_str(self.dice_config.exceed_max_dice_times_str))
+        if dice_times > self.plugin_config.max_dice_times:
+            await self.event.replay(self.format_str(self.plugin_config.exceed_max_dice_times_str))
             return
 
         dice = [random.randint(1, dice_faces) for _ in range(dice_times)]
@@ -47,39 +44,4 @@ class Dice(Plugin):
             result_str += f'{dice_sum}X{dice_multiply}={dice_sum * dice_multiply}'
 
         logger.info(f'Dice Plugin: {result_str}')
-        await self.event.replay(self.format_str(self.dice_config.message_str, result_str))
-
-    def format_str(self, format_str: str, message_str: str = '') -> str:
-        if self.adapter.name == 'cqhttp':
-            format_str = format_str.format(message=message_str, user_name=self.event.sender.nickname)
-        elif self.adapter.name == 'mirai':
-            if self.event.type == 'FriendMessage':
-                format_str = format_str.format(message=message_str, user_name=self.event.sender.nickname)
-            elif self.event.type == 'GroupMessage':
-                format_str = format_str.format(message=message_str, user_name=self.event.sender.memberName)
-        return format_str
-
-    async def rule(self) -> bool:
-        if self.adapter.name == 'cqhttp':
-            if self.event.type == 'message':
-                if self.dice_config.handle_all_message:
-                    return self.str_match(self.event.message.get_plain_text())
-                elif self.event.message_type == 'private' and self.dice_config.handle_friend_message:
-                    return self.str_match(self.event.message.get_plain_text())
-                elif self.event.message_type == 'group' and self.dice_config.handle_group_message:
-                    if self.dice_config.accept_group is None or self.event.group_id in self.dice_config.accept_group:
-                        return self.str_match(self.event.message.get_plain_text())
-        elif self.adapter.name == 'mirai':
-            if self.dice_config.handle_all_message:
-                return self.str_match(self.event.message.get_plain_text())
-            elif self.event.type == 'FriendMessage' and self.dice_config.handle_friend_message:
-                return self.str_match(self.event.message.get_plain_text())
-            elif self.event.type == 'GroupMessage' and self.dice_config.handle_group_message:
-                if self.dice_config.accept_group is None or self.event.sender.group.id in self.dice_config.accept_group:
-                    return self.str_match(self.event.message.get_plain_text())
-        return False
-
-    def str_match(self, msg_str: str) -> bool:
-        msg_str = msg_str.strip()
-        self.msg_match = self.re_pattern.fullmatch(msg_str)
-        return bool(self.msg_match)
+        await self.event.replay(self.format_str(self.plugin_config.message_str, result_str))
