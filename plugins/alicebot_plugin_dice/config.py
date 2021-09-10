@@ -4,7 +4,7 @@ from plugins.alicebot_plugin_public import Config as BaseConfig
 
 
 class Config(BaseConfig):
-    __config_name__ = 'plugin-dice'
+    __config_name__ = 'plugin_dice'
     command: Set[str] = {'r', 'roll', 'dice'}
     """命令文本。"""
     max_dice_times: int = 1000
