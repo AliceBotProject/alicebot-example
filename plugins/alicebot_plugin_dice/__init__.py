@@ -1,13 +1,14 @@
 import re
 import random
+
 from alicebot.log import logger
+
 from plugins.alicebot_plugin_public import BasePlugin
 
 from .config import Config
 
 
 class Dice(BasePlugin[Config]):
-    msg_match: re.Match
     plugin_config_class: Config = Config
 
     def __post_init__(self):

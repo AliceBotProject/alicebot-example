@@ -1,7 +1,8 @@
 import re
 from abc import ABC
-from alicebot.plugin import Plugin
 from typing import Generic, TypeVar
+
+from alicebot.plugin import Plugin
 
 from .config import Config
 
