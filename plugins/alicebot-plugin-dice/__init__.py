@@ -30,7 +30,7 @@ class Dice(Plugin):
             dice_multiply = int(self.msg_match.group('dice_multiply'))
 
         if dice_times > self.dice_config.max_dice_times:
-            await self.event.replay(self.format_str(self.dice_config.exceed_max_dice_times_srt))
+            await self.event.replay(self.format_str(self.dice_config.exceed_max_dice_times_str))
             return
 
         dice = [random.randint(1, dice_faces) for _ in range(dice_times)]
