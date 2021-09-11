@@ -12,3 +12,4 @@ class Config(BaseConfig):
     max_int: int = 100
     """最大随机整数。"""
     message_str: str = '{user_name}今天的运气是: {message}'
+    """最终发送消息的格式。"""

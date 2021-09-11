@@ -13,8 +13,8 @@ class Dice(BasePlugin[Config]):
 
     def __post_init__(self):
         self.re_pattern = re.compile(
-            f'[{"".join(self.plugin_config.command_prefix | getattr(self.config, "command_prefix", set()))}]' +
-            f'[{"".join(self.plugin_config.command)}]' +
+            f'({"|".join(self.plugin_config.command_prefix | getattr(self.config, "command_prefix", set()))})' +
+            f'({"|".join(self.plugin_config.command)})' +
             r'\s*(?P<dice_times>[0-9]+)[d](?P<dice_faces>[0-9]+)([*x](?P<dice_multiply>[0-9]+))?.*',
             flags=re.I
         )

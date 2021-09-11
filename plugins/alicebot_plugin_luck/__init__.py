@@ -12,13 +12,12 @@ class Luck(BasePlugin[Config]):
 
     def __post_init__(self):
         self.re_pattern = re.compile(
-            f'[{"".join(self.plugin_config.command_prefix | getattr(self.config, "command_prefix", set()))}]' +
-            f'[{"".join(self.plugin_config.command)}]' + r'.*',
+            f'({"|".join(self.plugin_config.command_prefix | getattr(self.config, "command_prefix", set()))})' +
+            f'({"|".join(self.plugin_config.command)})' + r'.*',
             flags=re.I
         )
 
     async def handle(self) -> None:
-        print(time.strftime('%Y%j', time.localtime()) + self.format_str('{user_id}'))
         random.seed(time.strftime('%Y%j', time.localtime()) + self.format_str('{user_id}'))
         await self.event.replay(self.format_str(self.plugin_config.message_str,
                                                 str(random.randint(self.plugin_config.min_int,
