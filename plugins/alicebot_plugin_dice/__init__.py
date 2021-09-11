@@ -28,7 +28,7 @@ class Dice(BasePlugin[Config]):
             dice_multiply = int(self.msg_match.group('dice_multiply'))
 
         if dice_times > self.plugin_config.max_dice_times:
-            await self.event.replay(self.format_str(self.plugin_config.exceed_max_dice_times_str))
+            await self.event.reply(self.format_str(self.plugin_config.exceed_max_dice_times_str))
             return
 
         dice = [random.randint(1, dice_faces) for _ in range(dice_times)]
@@ -45,4 +45,4 @@ class Dice(BasePlugin[Config]):
             result_str += f'{dice_sum}X{dice_multiply}={dice_sum * dice_multiply}'
 
         logger.info(f'Dice Plugin: {result_str}')
-        await self.event.replay(self.format_str(self.plugin_config.message_str, result_str))
+        await self.event.reply(self.format_str(self.plugin_config.message_str, result_str))

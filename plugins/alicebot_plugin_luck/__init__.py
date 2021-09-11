@@ -19,6 +19,6 @@ class Luck(BasePlugin[Config]):
 
     async def handle(self) -> None:
         random.seed(time.strftime('%Y%j', time.localtime()) + self.format_str('{user_id}'))
-        await self.event.replay(self.format_str(self.plugin_config.message_str,
-                                                str(random.randint(self.plugin_config.min_int,
-                                                                   self.plugin_config.max_int))))
+        await self.event.reply(self.format_str(self.plugin_config.message_str,
+                                               str(random.randint(self.plugin_config.min_int,
+                                                                  self.plugin_config.max_int))))
