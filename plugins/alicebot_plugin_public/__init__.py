@@ -19,14 +19,18 @@ class BasePlugin(Plugin, ABC, Generic[T_Config]):
         return getattr(self.config, self.plugin_config_class.__config_name__)
 
     def format_str(self, format_str: str, message_str: str = '') -> str:
+        user_name = ''
+        user_id = 0
         if self.adapter.name == 'cqhttp':
-            format_str = format_str.format(message=message_str, user_name=self.event.sender.nickname)
+            user_id = self.event.sender.user_id
+            user_name = self.event.sender.nickname
         elif self.adapter.name == 'mirai':
+            user_id = self.event.sender.id
             if self.event.type == 'FriendMessage':
-                format_str = format_str.format(message=message_str, user_name=self.event.sender.nickname)
+                user_name = self.event.sender.nickname
             elif self.event.type == 'GroupMessage':
-                format_str = format_str.format(message=message_str, user_name=self.event.sender.memberName)
-        return format_str
+                user_name = self.event.sender.memberName
+        return format_str.format(message=message_str, user_name=user_name, user_id=user_id)
 
     async def rule(self) -> bool:
         if self.adapter.name == 'cqhttp':
