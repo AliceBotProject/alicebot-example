@@ -6,7 +6,7 @@ from alicebot.plugin import Plugin
 
 from .config import Config
 
-T_Config = TypeVar('T_Config', bound=Config)
+T_Config = TypeVar("T_Config", bound=Config)
 
 
 class BasePlugin(Plugin, ABC, Generic[T_Config]):
@@ -18,37 +18,57 @@ class BasePlugin(Plugin, ABC, Generic[T_Config]):
     def plugin_config(self) -> T_Config:
         return getattr(self.config, self.plugin_config_class.__config_name__)
 
-    def format_str(self, format_str: str, message_str: str = '') -> str:
-        user_name = ''
+    def format_str(self, format_str: str, message_str: str = "") -> str:
+        user_name = ""
         user_id = 0
-        if self.adapter.name == 'cqhttp':
+        if self.adapter.name == "cqhttp":
             user_id = self.event.sender.user_id
             user_name = self.event.sender.nickname
-        elif self.adapter.name == 'mirai':
+        elif self.adapter.name == "mirai":
             user_id = self.event.sender.id
-            if self.event.type == 'FriendMessage':
+            if self.event.type == "FriendMessage":
                 user_name = self.event.sender.nickname
-            elif self.event.type == 'GroupMessage':
+            elif self.event.type == "GroupMessage":
                 user_name = self.event.sender.memberName
-        return format_str.format(message=message_str, user_name=user_name, user_id=user_id)
+        return format_str.format(
+            message=message_str, user_name=user_name, user_id=user_id
+        )
 
     async def rule(self) -> bool:
-        if self.adapter.name == 'cqhttp':
-            if self.event.type == 'message':
+        if self.adapter.name == "cqhttp":
+            if self.event.type == "message":
                 if self.plugin_config.handle_all_message:
                     return self.str_match(self.event.message.get_plain_text())
-                elif self.event.message_type == 'private' and self.plugin_config.handle_friend_message:
+                elif (
+                    self.event.message_type == "private"
+                    and self.plugin_config.handle_friend_message
+                ):
                     return self.str_match(self.event.message.get_plain_text())
-                elif self.event.message_type == 'group' and self.plugin_config.handle_group_message:
-                    if self.plugin_config.accept_group is None or self.event.group_id in self.plugin_config.accept_group:
+                elif (
+                    self.event.message_type == "group"
+                    and self.plugin_config.handle_group_message
+                ):
+                    if (
+                        self.plugin_config.accept_group is None
+                        or self.event.group_id in self.plugin_config.accept_group
+                    ):
                         return self.str_match(self.event.message.get_plain_text())
-        elif self.adapter.name == 'mirai':
+        elif self.adapter.name == "mirai":
             if self.plugin_config.handle_all_message:
                 return self.str_match(self.event.message.get_plain_text())
-            elif self.event.type == 'FriendMessage' and self.plugin_config.handle_friend_message:
+            elif (
+                self.event.type == "FriendMessage"
+                and self.plugin_config.handle_friend_message
+            ):
                 return self.str_match(self.event.message.get_plain_text())
-            elif self.event.type == 'GroupMessage' and self.plugin_config.handle_group_message:
-                if self.plugin_config.accept_group is None or self.event.sender.group.id in self.plugin_config.accept_group:
+            elif (
+                self.event.type == "GroupMessage"
+                and self.plugin_config.handle_group_message
+            ):
+                if (
+                    self.plugin_config.accept_group is None
+                    or self.event.sender.group.id in self.plugin_config.accept_group
+                ):
                     return self.str_match(self.event.message.get_plain_text())
         return False
 

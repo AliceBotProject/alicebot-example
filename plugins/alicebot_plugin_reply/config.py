@@ -2,10 +2,10 @@ from plugins.alicebot_plugin_public import Config as BaseConfig
 
 
 class Config(BaseConfig):
-    __config_name__ = 'plugin_reply'
-    data_type: str = 'json'
+    __config_name__ = "plugin_reply"
+    data_type: str = "json"
     """数据类型，目前只支持 json。"""
-    data_file: str = 'data/reply_data.json'
+    data_file: str = "data/reply_data.json"
     """数据文件位置。"""
     ignore_case: bool = True
     """是否忽略大小写，默认为 True。"""

@@ -4,8 +4,8 @@ from pydantic import BaseModel
 
 
 class Config(BaseModel):
-    __config_name__ = ''
-    command_prefix: Set[str] = {'.', '。'}
+    __config_name__ = ""
+    command_prefix: Set[str] = {".", "。"}
     """命令前缀。"""
     command: Set[str] = {}
     """命令文本。"""
@@ -17,5 +17,5 @@ class Config(BaseModel):
     """是否处理群消息。"""
     accept_group: Optional[Set[int]] = None
     """处理消息的群号，仅当 handle_group_message 为 True 时生效，留空表示处理所有群。"""
-    message_str: str = '{user_name}: {message}'
+    message_str: str = "{user_name}: {message}"
     """最终发送消息的格式。"""

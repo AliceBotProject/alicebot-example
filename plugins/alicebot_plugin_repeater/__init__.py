@@ -1,5 +1,4 @@
 from alicebot.exception import AdapterTimeout
-
 from plugins.alicebot_plugin_public import BasePlugin
 
 from .config import Config
@@ -22,16 +21,16 @@ class Repeater(BasePlugin[Config]):
         if self.try_times >= 2:
             raise AdapterTimeout
         flag = False
-        if event.adapter.name == 'cqhttp':
-            if event.type == 'message':
-                if event.message_type == 'private':
+        if event.adapter.name == "cqhttp":
+            if event.type == "message":
+                if event.message_type == "private":
                     flag = event.user_id == self.event.user_id
-                elif event.message_type == 'group':
+                elif event.message_type == "group":
                     flag = event.group_id == self.event.group_id
-        elif event.adapter.name == 'mirai':
-            if event.type == 'FriendMessage':
+        elif event.adapter.name == "mirai":
+            if event.type == "FriendMessage":
                 flag = event.sender.id == self.event.sender.id
-            elif event.type == 'GroupMessage':
+            elif event.type == "GroupMessage":
                 flag = event.sender.group.id == self.event.sender.group.id
         if flag:
             self.try_times += 1
