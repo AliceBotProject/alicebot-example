@@ -1,9 +1,9 @@
 from typing import Set
 
-from plugins.alicebot_plugin_public import Config as BaseConfig
+from plugins.alicebot_plugin_base import CommandPluginConfig
 
 
-class Config(BaseConfig):
+class Config(CommandPluginConfig):
     __config_name__ = "plugin_echo"
     command: Set[str] = {"echo"}
     """命令文本。"""

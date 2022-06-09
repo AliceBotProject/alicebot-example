@@ -9,7 +9,7 @@ repository = "https://github.com/st1020/alicebot-example"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-alicebot = "^0.3.0"
+alicebot = "^0.3.1"
 alicebot-adapter-cqhttp = "^0.2.0"
 
 [tool.poetry.dev-dependencies]

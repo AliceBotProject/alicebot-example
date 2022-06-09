@@ -1,9 +1,9 @@
 from typing import Set, Optional
 
-from plugins.alicebot_plugin_public import Config as BaseConfig
+from plugins.alicebot_plugin_base import CommandPluginConfig
 
 
-class Config(BaseConfig):
+class Config(CommandPluginConfig):
     __config_name__ = "plugin_send"
     command: Set[str] = {"send"}
     """命令文本。"""

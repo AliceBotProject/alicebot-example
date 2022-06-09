@@ -1,12 +1,12 @@
 import re
 import json
 
-from plugins.alicebot_plugin_public import BasePlugin
+from plugins.alicebot_plugin_base import BasePlugin
 
 from .config import Config
 
 
-class Reply(BasePlugin[Config]):
+class Reply(BasePlugin[None, Config]):
     priority: int = 1
     plugin_config_class: Config = Config
 

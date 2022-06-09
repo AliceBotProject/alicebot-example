@@ -1,24 +1,19 @@
 import re
 
-from plugins.alicebot_plugin_public import BasePlugin
+from plugins.alicebot_plugin_base import CommandPluginBase
 
 from .config import Config
 
 
-class Send(BasePlugin[Config]):
+class Send(CommandPluginBase[None, Config]):
     plugin_config_class: Config = Config
 
     def __post_init__(self):
-        self.re_pattern = re.compile(
-            f'({"|".join(self.plugin_config.command_prefix | getattr(self.config, "command_prefix", set()))})'
-            + f'({"|".join(self.plugin_config.command)})'
-            + r"\s*(?P<message>.*)",
-            flags=re.I,
-        )
+        self.re_pattern = re.compile(r"\s*(?P<message>.*)", flags=re.I)
 
     async def handle(self) -> None:
         try:
-            await self.send(
+            await self.event.adapter.send(
                 self.msg_match.group("message"),
                 "private",
                 self.plugin_config.send_user_id,

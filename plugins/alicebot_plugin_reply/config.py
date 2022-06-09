@@ -1,7 +1,7 @@
-from plugins.alicebot_plugin_public import Config as BaseConfig
+from plugins.alicebot_plugin_base import CommandPluginConfig
 
 
-class Config(BaseConfig):
+class Config(CommandPluginConfig):
     __config_name__ = "plugin_reply"
     data_type: str = "json"
     """数据类型，目前只支持 json。"""
