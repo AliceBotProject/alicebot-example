@@ -2,6 +2,7 @@ import re
 import random
 
 from alicebot.log import logger
+
 from plugins.alicebot_plugin_base import CommandPluginBase
 
 from .config import Config
