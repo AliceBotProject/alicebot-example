@@ -9,7 +9,7 @@ from .config import Config
 
 
 class Dice(CommandPluginBase[None, Config]):
-    plugin_config_class: Config = Config
+    Config = Config
 
     def __post_init__(self):
         self.re_pattern = re.compile(
@@ -25,9 +25,9 @@ class Dice(CommandPluginBase[None, Config]):
         else:
             dice_multiply = int(self.msg_match.group("dice_multiply"))
 
-        if dice_times > self.plugin_config.max_dice_times:
+        if dice_times > self.config.max_dice_times:
             await self.event.reply(
-                self.format_str(self.plugin_config.exceed_max_dice_times_str)
+                self.format_str(self.config.exceed_max_dice_times_str)
             )
             return
 
@@ -47,6 +47,4 @@ class Dice(CommandPluginBase[None, Config]):
             result_str += f"{dice_sum}X{dice_multiply}={dice_sum * dice_multiply}"
 
         logger.info(f"Dice Plugin: {result_str}")
-        await self.event.reply(
-            self.format_str(self.plugin_config.message_str, result_str)
-        )
+        await self.event.reply(self.format_str(self.config.message_str, result_str))

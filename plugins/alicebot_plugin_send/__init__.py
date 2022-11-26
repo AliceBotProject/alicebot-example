@@ -6,7 +6,7 @@ from .config import Config
 
 
 class Send(CommandPluginBase[None, Config]):
-    plugin_config_class: Config = Config
+    Config = Config
 
     def __post_init__(self):
         self.re_pattern = re.compile(r"\s*(?P<message>.*)", flags=re.I)
@@ -16,15 +16,13 @@ class Send(CommandPluginBase[None, Config]):
             await self.event.adapter.send(
                 self.msg_match.group("message"),
                 "private",
-                self.plugin_config.send_user_id,
+                self.config.send_user_id,
             )
         except Exception as e:
-            if self.plugin_config.send_filed_msg is not None:
+            if self.config.send_filed_msg is not None:
                 await self.event.reply(
-                    self.format_str(self.plugin_config.send_filed_msg, repr(e))
+                    self.format_str(self.config.send_filed_msg, repr(e))
                 )
         else:
-            if self.plugin_config.send_success_msg is not None:
-                await self.event.reply(
-                    self.format_str(self.plugin_config.send_success_msg)
-                )
+            if self.config.send_success_msg is not None:
+                await self.event.reply(self.format_str(self.config.send_success_msg))

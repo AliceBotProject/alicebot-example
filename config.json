@@ -1,9 +1,0 @@
-{
-  "plugin_dir": [
-    "plugins"
-  ],
-  "adapters": [
-    "alicebot.adapter.cqhttp"
-  ],
-  "verbose_exception_log": true
-}

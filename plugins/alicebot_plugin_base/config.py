@@ -1,9 +1,9 @@
 from typing import Set, Optional
 
-from pydantic import BaseModel
+from alicebot import ConfigModel
 
 
-class BasePluginConfig(BaseModel):
+class BasePluginConfig(ConfigModel):
     __config_name__ = ""
     handle_all_message: bool = False
     """是否处理所有类型的消息，此配置为 True 时会覆盖 handle_friend_message 和 handle_group_message。"""
