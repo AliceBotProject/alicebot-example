@@ -1,27 +1,25 @@
-import re
 import json
+import re
+from typing import Any, Dict, Union
 
 from plugins.alicebot_plugin_base import BasePlugin
 
 from .config import Config
 
 
-class Reply(BasePlugin[None, Config]):
-    priority: int = 1
-    Config = Config
+class Reply(BasePlugin[None, Config], config=Config):
+    priority = 1
 
-    def __post_init__(self):
-        with open(self.config.data_file, "r") as fp:
+    def __init__(self) -> None:
+        with self.config.data_file.open() as fp:
             if self.config.data_type == "json":
                 json_data = json.load(fp)
             else:
                 raise ValueError(f"data_type must be json, not {self.config.data_type}")
-        self.rule_to_message = {
+        self.rule_to_message: Dict[str, Union[str, Any]] = {
             item["rule"]: item["message"]
             for item in json_data
-            if isinstance(item, dict)
-            and "rule" in item.keys()
-            and "message" in item.keys()
+            if isinstance(item, dict) and "rule" in item and "message" in item
         }
 
     async def handle(self) -> None:
@@ -32,10 +30,11 @@ class Reply(BasePlugin[None, Config]):
             await self.event.reply(msg)
 
     def str_match(self, msg_str: str) -> bool:
-        msg_str = msg_str.strip()
-        for rule in self.rule_to_message.keys():
+        for rule in self.rule_to_message:
             msg_match = re.fullmatch(
-                rule, msg_str, flags=re.I if self.config.ignore_case else 0
+                rule,
+                msg_str.strip(),
+                flags=re.I if self.config.ignore_case else 0,
             )
             if msg_match:
                 self.msg_match = msg_match
