@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: v4.4.0
     hooks:
       - id: check-ast
       - id: check-case-conflict
@@ -9,12 +9,12 @@ repos:
       - id: check-yaml
       - id: fix-byte-order-marker
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.281
     hooks:
-      - id: isort
+      - id: ruff
 
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 23.7.0
     hooks:
       - id: black
