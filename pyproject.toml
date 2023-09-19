@@ -6,13 +6,7 @@ authors = [{ name = "st1020", email = "stone_1020@qq.com" }]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.8"
-dependencies = [
-    "alicebot>=0.7.1",
-    "alicebot-adapter-cqhttp>=0.7.1",
-    "alicebot-adapter-onebot>=0.7.1",
-    "alicebot-adapter-mirai>=0.7.1",
-    "watchfiles",
-]
+dependencies = ["alicebot[all]>=0.8.1", "watchfiles"]
 
 [tool.pdm.dev-dependencies]
 lint = ["black", "ruff"]

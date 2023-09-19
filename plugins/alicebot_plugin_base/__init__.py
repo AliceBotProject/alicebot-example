@@ -2,9 +2,8 @@ import re
 from abc import ABC, abstractmethod
 from typing import Any, Generic, TypeVar
 
-from alicebot import Plugin
-from alicebot.event import MessageEvent
-from alicebot.typing import T_State
+from alicebot import MessageEvent, Plugin
+from alicebot.typing import StateT
 
 from .config import BasePluginConfig, CommandPluginConfig, RegexPluginConfig
 
@@ -14,9 +13,9 @@ CommandPluginConfigT = TypeVar("CommandPluginConfigT", bound=CommandPluginConfig
 
 
 class BasePlugin(
-    Plugin[MessageEvent[Any, Any], T_State, ConfigT],
+    Plugin[MessageEvent[Any], StateT, ConfigT],
     ABC,
-    Generic[T_State, ConfigT],
+    Generic[StateT, ConfigT],
 ):
     def format_str(self, format_str: str, message_str: str = "") -> str:
         return format_str.format(
@@ -67,7 +66,7 @@ class BasePlugin(
         raise NotImplementedError
 
 
-class RegexPluginBase(BasePlugin[T_State, RegexPluginConfigT], ABC):
+class RegexPluginBase(BasePlugin[StateT, RegexPluginConfigT], ABC):
     msg_match: re.Match[str]
     re_pattern: re.Pattern[str]
 
@@ -80,7 +79,7 @@ class RegexPluginBase(BasePlugin[T_State, RegexPluginConfigT], ABC):
         return bool(self.msg_match)
 
 
-class CommandPluginBase(RegexPluginBase[T_State, CommandPluginConfigT], ABC):
+class CommandPluginBase(RegexPluginBase[StateT, CommandPluginConfigT], ABC):
     command_match: re.Match[str]
     command_re_pattern: re.Pattern[str]
 
