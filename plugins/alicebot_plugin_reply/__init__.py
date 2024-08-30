@@ -1,13 +1,15 @@
 import json
 import re
-from typing import Any, Dict, Union
+from typing import Any, Union
+
+from alicebot import MessageEvent
 
 from plugins.alicebot_plugin_base import BasePlugin
 
 from .config import Config
 
 
-class Reply(BasePlugin[None, Config], config=Config):
+class Reply(BasePlugin[MessageEvent[Any], None, Config]):
     priority = 1
 
     def __init__(self) -> None:
@@ -16,7 +18,7 @@ class Reply(BasePlugin[None, Config], config=Config):
                 json_data = json.load(fp)
             else:
                 raise ValueError(f"data_type must be json, not {self.config.data_type}")
-        self.rule_to_message: Dict[str, Union[str, Any]] = {
+        self.rule_to_message: dict[str, Union[str, Any]] = {
             item["rule"]: item["message"]
             for item in json_data
             if isinstance(item, dict) and "rule" in item and "message" in item
@@ -34,7 +36,7 @@ class Reply(BasePlugin[None, Config], config=Config):
             msg_match = re.fullmatch(
                 rule,
                 msg_str.strip(),
-                flags=re.I if self.config.ignore_case else 0,
+                flags=re.IGNORECASE if self.config.ignore_case else 0,
             )
             if msg_match:
                 self.msg_match = msg_match

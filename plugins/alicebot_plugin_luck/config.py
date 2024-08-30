@@ -1,5 +1,3 @@
-from typing import Set
-
 from pydantic import Field
 
 from plugins.alicebot_plugin_base import CommandPluginConfig
@@ -7,7 +5,7 @@ from plugins.alicebot_plugin_base import CommandPluginConfig
 
 class Config(CommandPluginConfig):
     __config_name__ = "plugin_luck"
-    command: Set[str] = Field(default_factory=lambda: {"luck"})
+    command: set[str] = Field(default_factory=lambda: {"luck"})
     """命令文本。"""
     min_int: int = 0
     """最小随机整数。"""

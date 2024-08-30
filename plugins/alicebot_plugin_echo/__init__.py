@@ -1,12 +1,15 @@
 import re
+from typing import Any
+
+from alicebot import MessageEvent
 
 from plugins.alicebot_plugin_base import CommandPluginBase
 
 from .config import Config
 
 
-class Echo(CommandPluginBase[None, Config], config=Config):
-    command_re_pattern = re.compile(r"(?P<echo_str>.*)", flags=re.I)
+class Echo(CommandPluginBase[MessageEvent[Any], None, Config]):
+    command_re_pattern = re.compile(r"(?P<echo_str>.*)", flags=re.IGNORECASE)
 
     async def handle(self) -> None:
         await self.event.reply(

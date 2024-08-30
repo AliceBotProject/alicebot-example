@@ -5,17 +5,17 @@ description = "AliceBot Example Bot"
 authors = [{ name = "st1020", email = "stone_1020@qq.com" }]
 license = { text = "MIT" }
 readme = "README.md"
-requires-python = ">=3.8"
-dependencies = ["alicebot[all]>=0.8.1", "watchfiles"]
+requires-python = ">=3.9"
+dependencies = ["alicebot[all]>=0.10.0"]
 
-[tool.pdm.dev-dependencies]
-lint = ["black", "ruff"]
-
-[tool.black]
-target-version = ["py38", "py39", "py310", "py311"]
+[tool.uv]
+dev-dependencies = ["ruff"]
 
 [tool.ruff]
 line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     "D",      # pydocstyle
@@ -25,29 +25,19 @@ ignore = [
     "EM",     # flake8-errmsg
     "INP",    # flake8-no-pep420
     "E501",   # Line too long, handled by black
-    "ANN101", # Missing type annotation for self
-    "ANN102", # Missing type annotation for cls
     "S101",   # Use of assert detected
     "S311",   # Standard pseudo-random generators are not suitable for cryptographic purposes
     "TRY003", # Avoid specifying long messages outside the exception class
-    "RUF001", # String contains ambiguous unicode character string
-    "RUF002", # Docstring contains ambiguous unicode character string
-    "RUF003", # Comment contains ambiguous unicode character string
 ]
-target-version = "py38"
+allowed-confusables = ["，", "：", "！"]
 
-[tool.ruff.isort]
-known-third-party = ["alicebot", "pydantic"]
-extra-standard-library = ["typing_extensions"]
-
-[tool.ruff.pyupgrade]
+[tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
 
 [tool.pyright]
-pythonVersion = "3.8"
+pythonVersion = "3.9"
 pythonPlatform = "All"
 typeCheckingMode = "strict"
-reportUnnecessaryIsInstance = false
 reportCallInDefaultInitializer = true
 reportImportCycles = true
 reportPropertyTypeMismatch = true

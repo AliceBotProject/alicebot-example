@@ -1,6 +1,8 @@
 import random
 import re
+from typing import Any
 
+from alicebot import MessageEvent
 from alicebot.log import logger
 
 from plugins.alicebot_plugin_base import CommandPluginBase
@@ -8,10 +10,10 @@ from plugins.alicebot_plugin_base import CommandPluginBase
 from .config import Config
 
 
-class Dice(CommandPluginBase[None, Config], config=Config):
+class Dice(CommandPluginBase[MessageEvent[Any], None, Config]):
     command_re_pattern = re.compile(
         r"\s*(?P<dice_times>\d+)d(?P<dice_faces>\d+)([*x](?P<dice_multiply>\d+))?",
-        flags=re.I,
+        flags=re.IGNORECASE,
     )
 
     async def handle(self) -> None:
@@ -33,12 +35,12 @@ class Dice(CommandPluginBase[None, Config], config=Config):
         if dice_multiply is None:
             result_str = f"{dice_times}D{dice_faces}="
             if dice_times != 1:
-                result_str += f"{'+'.join((str(x) for x in dice))}="
+                result_str += f"{'+'.join(str(x) for x in dice)}="
             result_str += str(dice_sum)
         else:
             result_str = f"{dice_times}D{dice_faces}X{dice_multiply}="
             if dice_times != 1:
-                result_str += f"({'+'.join((str(x) for x in dice))})X{dice_multiply}="
+                result_str += f"({'+'.join(str(x) for x in dice)})X{dice_multiply}="
             result_str += f"{dice_sum}X{dice_multiply}={dice_sum * dice_multiply}"
 
         logger.info(f"Dice Plugin: {result_str}")

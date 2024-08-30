@@ -1,5 +1,3 @@
-from typing import Set
-
 from pydantic import Field
 
 from plugins.alicebot_plugin_base import CommandPluginConfig
@@ -7,7 +5,7 @@ from plugins.alicebot_plugin_base import CommandPluginConfig
 
 class Config(CommandPluginConfig):
     __config_name__ = "plugin_dice"
-    command: Set[str] = Field(default_factory=lambda: {"r", "roll", "dice"})
+    command: set[str] = Field(default_factory=lambda: {"r", "roll", "dice"})
     """命令文本。"""
     max_dice_times: int = 1000
     """最大单次投掷次数。"""

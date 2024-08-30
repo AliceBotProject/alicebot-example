@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import FilePath
 
 from plugins.alicebot_plugin_base import CommandPluginConfig
@@ -7,7 +9,7 @@ class Config(CommandPluginConfig):
     __config_name__ = "plugin_reply"
     data_type: str = "json"
     """数据类型，目前只支持 json。"""
-    data_file: FilePath = FilePath("data/reply_data.json")
+    data_file: FilePath = Path("data/reply_data.json")
     """数据文件位置。"""
     ignore_case: bool = True
     """是否忽略大小写，默认为 True。"""

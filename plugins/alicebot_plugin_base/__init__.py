@@ -10,12 +10,13 @@ from .config import BasePluginConfig, CommandPluginConfig, RegexPluginConfig
 ConfigT = TypeVar("ConfigT", bound=BasePluginConfig)
 RegexPluginConfigT = TypeVar("RegexPluginConfigT", bound=RegexPluginConfig)
 CommandPluginConfigT = TypeVar("CommandPluginConfigT", bound=CommandPluginConfig)
+EventT = TypeVar("EventT", bound=MessageEvent[Any])
 
 
 class BasePlugin(
-    Plugin[MessageEvent[Any], StateT, ConfigT],
+    Plugin[EventT, StateT, ConfigT],
     ABC,
-    Generic[StateT, ConfigT],
+    Generic[EventT, StateT, ConfigT],
 ):
     def format_str(self, format_str: str, message_str: str = "") -> str:
         return format_str.format(
@@ -66,7 +67,7 @@ class BasePlugin(
         raise NotImplementedError
 
 
-class RegexPluginBase(BasePlugin[StateT, RegexPluginConfigT], ABC):
+class RegexPluginBase(BasePlugin[EventT, StateT, RegexPluginConfigT], ABC):
     msg_match: re.Match[str]
     re_pattern: re.Pattern[str]
 
@@ -79,7 +80,7 @@ class RegexPluginBase(BasePlugin[StateT, RegexPluginConfigT], ABC):
         return bool(self.msg_match)
 
 
-class CommandPluginBase(RegexPluginBase[StateT, CommandPluginConfigT], ABC):
+class CommandPluginBase(RegexPluginBase[EventT, StateT, CommandPluginConfigT], ABC):
     command_match: re.Match[str]
     command_re_pattern: re.Pattern[str]
 
@@ -89,7 +90,7 @@ class CommandPluginBase(RegexPluginBase[StateT, CommandPluginConfigT], ABC):
                 f'[{"".join(self.config.command_prefix)}]'
                 f'({"|".join(self.config.command)})'
                 r"\s*(?P<command_args>.*)",
-                flags=re.I if self.config.ignore_case else 0,
+                flags=re.IGNORECASE if self.config.ignore_case else 0,
             )
         msg_str = msg_str.strip()
         msg_match = self.re_pattern.fullmatch(msg_str)
